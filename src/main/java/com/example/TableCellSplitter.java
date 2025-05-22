@@ -76,7 +76,7 @@ public class TableCellSplitter {
      */
     private static Table createSampleTable(DocumentBuilder builder) throws Exception {
         // Start the table
-        builder.startTable();
+        Table table = builder.startTable();
         
         // First row
         builder.insertCell();
@@ -105,9 +105,9 @@ public class TableCellSplitter {
         builder.write("I");
         builder.endRow();
         
-        // End the table and get a reference to it
+        // End the table and return it
         builder.endTable();
-        return (Table)builder.getCurrentNode().getAncestor(NodeType.TABLE);
+        return table;
     }
     
     /**
@@ -129,6 +129,7 @@ public class TableCellSplitter {
         table.getRows().insert(rowIndex + 1, newRow);
         
         // Update the content of the original (top) cell
+        cell.getFirstParagraph().getRuns().clear();
         cell.getFirstParagraph().appendChild(new Run(cell.getDocument(), topContent));
         
         // Update the content of the new (bottom) cell
