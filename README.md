@@ -1,73 +1,41 @@
-# Welcome to your Lovable project
 
-## Project info
+# Table Cell Splitter
 
-**URL**: https://lovable.dev/projects/3b5b6295-81b2-4c94-beef-c9b995a40434
+A simple Java application that demonstrates the concept of splitting table cells both horizontally and vertically.
 
-## How can I edit this code?
+## Features
 
-There are several ways of editing your application.
+- Create tables with cells
+- Split cells horizontally (one cell becomes two cells vertically arranged)
+- Split cells vertically (one cell becomes two cells horizontally arranged)
+- Display tables in console output
 
-**Use Lovable**
+## How to Build
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/3b5b6295-81b2-4c94-beef-c9b995a40434) and start prompting.
+This project uses Maven for build management. To build the project:
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+mvn clean package
 ```
 
-**Edit a file directly in GitHub**
+## How to Run
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+After building, run the application using:
 
-**Use GitHub Codespaces**
+```bash
+java -jar target/table-cell-splitter-1.0-SNAPSHOT.jar
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Example Output
 
-## What technologies are used for this project?
+The application demonstrates:
 
-This project is built with:
+1. A 3x3 table with cells labeled A through I
+2. Splitting cell 'E' horizontally into 'E1' and 'E2'
+3. Splitting cell 'E' vertically into 'E1' and 'E2' (in a separate table)
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Implementation Details
 
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/3b5b6295-81b2-4c94-beef-c9b995a40434) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+The code provides two key classes:
+- `Cell`: Represents a table cell with content and span properties
+- `Table`: Represents a table with methods for cell manipulation and splitting
