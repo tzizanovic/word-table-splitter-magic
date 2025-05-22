@@ -1,166 +1,164 @@
 
 package com.example;
 
+import com.aspose.words.*;
+import java.io.File;
+
 /**
- * A simple Java application that demonstrates splitting table cells.
+ * A Java application that demonstrates table cell splitting using Aspose.Words.
  */
 public class TableCellSplitter {
     
     /**
-     * Represents a table cell in a grid.
+     * Main method to run the table cell splitting demonstration.
      */
-    public static class Cell {
-        private Object content;
-        private int rowSpan;
-        private int colSpan;
-        
-        public Cell(Object content) {
-            this.content = content;
-            this.rowSpan = 1;
-            this.colSpan = 1;
-        }
-        
-        public Cell(Object content, int rowSpan, int colSpan) {
-            this.content = content;
-            this.rowSpan = rowSpan;
-            this.colSpan = colSpan;
-        }
-        
-        public Object getContent() {
-            return content;
-        }
-        
-        public int getRowSpan() {
-            return rowSpan;
-        }
-        
-        public int getColSpan() {
-            return colSpan;
-        }
-        
-        @Override
-        public String toString() {
-            return content.toString();
+    public static void main(String[] args) {
+        try {
+            // Create a new document
+            Document doc = new Document();
+            DocumentBuilder builder = new DocumentBuilder(doc);
+            
+            System.out.println("Creating a table and splitting cells using Aspose.Words...");
+            
+            // Create a basic 3x3 table
+            Table table = createSampleTable(builder);
+            
+            // Add a paragraph after the table for spacing
+            builder.writeln();
+            builder.writeln("After splitting cell E horizontally:");
+            builder.writeln();
+            
+            // Create another table for horizontal split demonstration
+            Table horizontalSplitTable = createSampleTable(builder);
+            
+            // Split cell E horizontally
+            Cell cellE = horizontalSplitTable.getRows().get(1).getCells().get(1);
+            splitCellHorizontally(cellE, horizontalSplitTable, "E1", "E2");
+            
+            // Add a paragraph after the table for spacing
+            builder.writeln();
+            builder.writeln("After splitting cell E vertically:");
+            builder.writeln();
+            
+            // Create another table for vertical split demonstration
+            Table verticalSplitTable = createSampleTable(builder);
+            
+            // Split cell E vertically
+            cellE = verticalSplitTable.getRows().get(1).getCells().get(1);
+            splitCellVertically(cellE, verticalSplitTable, "E1", "E2");
+            
+            // Save the document to disk
+            File outputDir = new File("output");
+            if (!outputDir.exists()) {
+                outputDir.mkdir();
+            }
+            
+            doc.save("output/table_cell_split_demo.docx");
+            doc.save("output/table_cell_split_demo.pdf");
+            doc.save("output/table_cell_split_demo.html");
+            
+            System.out.println("Documents successfully created in the 'output' directory:");
+            System.out.println("- table_cell_split_demo.docx");
+            System.out.println("- table_cell_split_demo.pdf");
+            System.out.println("- table_cell_split_demo.html");
+            
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     
     /**
-     * Represents a table with cells that can be split.
+     * Creates a sample 3x3 table with cells labeled A through I.
+     * 
+     * @param builder DocumentBuilder to create the table
+     * @return The created table
      */
-    public static class Table {
-        private Cell[][] cells;
+    private static Table createSampleTable(DocumentBuilder builder) throws Exception {
+        // Start the table
+        builder.startTable();
         
-        public Table(int rows, int cols) {
-            cells = new Cell[rows][cols];
-            // Initialize with empty cells
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    cells[i][j] = new Cell("");
-                }
-            }
-        }
+        // First row
+        builder.insertCell();
+        builder.write("A");
+        builder.insertCell();
+        builder.write("B");
+        builder.insertCell();
+        builder.write("C");
+        builder.endRow();
         
-        public void setCell(int row, int col, Cell cell) {
-            cells[row][col] = cell;
-        }
+        // Second row
+        builder.insertCell();
+        builder.write("D");
+        builder.insertCell();
+        builder.write("E");
+        builder.insertCell();
+        builder.write("F");
+        builder.endRow();
         
-        public Cell getCell(int row, int col) {
-            return cells[row][col];
-        }
+        // Third row
+        builder.insertCell();
+        builder.write("G");
+        builder.insertCell();
+        builder.write("H");
+        builder.insertCell();
+        builder.write("I");
+        builder.endRow();
         
-        /**
-         * Split a cell horizontally into two cells.
-         * @param row Row index of the cell
-         * @param col Column index of the cell
-         * @param topContent Content for the top cell after split
-         * @param bottomContent Content for the bottom cell after split
-         */
-        public void splitCellHorizontally(int row, int col, Object topContent, Object bottomContent) {
-            Cell originalCell = cells[row][col];
-            
-            // Create two new cells
-            cells[row][col] = new Cell(topContent);
-            
-            // If there is space below, create the bottom cell
-            if (row + 1 < cells.length) {
-                cells[row + 1][col] = new Cell(bottomContent);
-            } else {
-                System.out.println("Warning: Cannot split cell horizontally - no space below");
-            }
-        }
-        
-        /**
-         * Split a cell vertically into two cells.
-         * @param row Row index of the cell
-         * @param col Column index of the cell
-         * @param leftContent Content for the left cell after split
-         * @param rightContent Content for the right cell after split
-         */
-        public void splitCellVertically(int row, int col, Object leftContent, Object rightContent) {
-            Cell originalCell = cells[row][col];
-            
-            // Create two new cells
-            cells[row][col] = new Cell(leftContent);
-            
-            // If there is space to the right, create the right cell
-            if (col + 1 < cells[0].length) {
-                cells[row][col + 1] = new Cell(rightContent);
-            } else {
-                System.out.println("Warning: Cannot split cell vertically - no space to the right");
-            }
-        }
-        
-        /**
-         * Display the table in a text representation.
-         */
-        public void printTable() {
-            for (Cell[] row : cells) {
-                for (Cell cell : row) {
-                    System.out.print(cell + "\t");
-                }
-                System.out.println();
-            }
-        }
+        // End the table and get a reference to it
+        builder.endTable();
+        return (Table)builder.getCurrentNode().getAncestor(NodeType.TABLE);
     }
     
-    public static void main(String[] args) {
-        // Create a 3x3 table
-        Table table = new Table(3, 3);
+    /**
+     * Splits a cell horizontally (one cell becomes two cells stacked vertically).
+     * 
+     * @param cell The cell to split
+     * @param table The table containing the cell
+     * @param topContent Content for the top cell
+     * @param bottomContent Content for the bottom cell
+     */
+    private static void splitCellHorizontally(Cell cell, Table table, String topContent, String bottomContent) throws Exception {
+        // Get the cell's row and column indices
+        Row parentRow = cell.getParentRow();
+        int rowIndex = parentRow.getParentTable().indexOf(parentRow);
+        int cellIndex = parentRow.indexOf(cell);
         
-        // Set some initial content
-        table.setCell(0, 0, new Cell("A"));
-        table.setCell(0, 1, new Cell("B"));
-        table.setCell(0, 2, new Cell("C"));
-        table.setCell(1, 0, new Cell("D"));
-        table.setCell(1, 1, new Cell("E"));
-        table.setCell(1, 2, new Cell("F"));
-        table.setCell(2, 0, new Cell("G"));
-        table.setCell(2, 1, new Cell("H"));
-        table.setCell(2, 2, new Cell("I"));
+        // Insert a new row after the current one
+        Row newRow = (Row)parentRow.deepClone(true);
+        table.getRows().insert(rowIndex + 1, newRow);
         
-        System.out.println("Original table:");
-        table.printTable();
+        // Update the content of the original (top) cell
+        cell.getFirstParagraph().appendChild(new Run(cell.getDocument(), topContent));
         
-        // Split a cell horizontally
-        System.out.println("\nAfter splitting cell 'E' horizontally:");
-        table.splitCellHorizontally(1, 1, "E1", "E2");
-        table.printTable();
+        // Update the content of the new (bottom) cell
+        Cell newCell = newRow.getCells().get(cellIndex);
+        newCell.getFirstParagraph().getRuns().clear();
+        newCell.getFirstParagraph().appendChild(new Run(cell.getDocument(), bottomContent));
+    }
+    
+    /**
+     * Splits a cell vertically (one cell becomes two cells side by side).
+     * 
+     * @param cell The cell to split
+     * @param table The table containing the cell
+     * @param leftContent Content for the left cell
+     * @param rightContent Content for the right cell
+     */
+    private static void splitCellVertically(Cell cell, Table table, String leftContent, String rightContent) throws Exception {
+        // Get original cell properties
+        Row parentRow = cell.getParentRow();
+        int cellIndex = parentRow.indexOf(cell);
         
-        // Create a new table for vertical split demo
-        Table table2 = new Table(3, 3);
-        table2.setCell(0, 0, new Cell("A"));
-        table2.setCell(0, 1, new Cell("B"));
-        table2.setCell(0, 2, new Cell("C"));
-        table2.setCell(1, 0, new Cell("D"));
-        table2.setCell(1, 1, new Cell("E"));
-        table2.setCell(1, 2, new Cell("F"));
-        table2.setCell(2, 0, new Cell("G"));
-        table2.setCell(2, 1, new Cell("H"));
-        table2.setCell(2, 2, new Cell("I"));
+        // Update the content of the original (left) cell
+        cell.getFirstParagraph().getRuns().clear();
+        cell.getFirstParagraph().appendChild(new Run(cell.getDocument(), leftContent));
         
-        // Split a cell vertically
-        System.out.println("\nAfter splitting cell 'E' vertically:");
-        table2.splitCellVertically(1, 1, "E1", "E2");
-        table2.printTable();
+        // Create a new cell to the right
+        Cell newCell = new Cell(cell.getDocument());
+        newCell.getFirstParagraph().appendChild(new Run(cell.getDocument(), rightContent));
+        
+        // Insert the new cell after the original one
+        parentRow.getCells().insert(cellIndex + 1, newCell);
     }
 }
